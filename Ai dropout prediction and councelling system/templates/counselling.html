@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Counselling Recommendations - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-counselling.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <header class="page-header">
+        <h1>Personalized Counselling Recommendations</h1>
+        <p>Review students grouped by risk level and use these recommendations to guide counselling conversations.
+            Each card shows attendance, average marks, study hours, backlogs, and a tailored suggestion.</p>
+    </header>
+
+    <section class="risk-section">
+        <h2 class="risk-title">High Risk</h2>
+        {% if high_students %}
+        <div class="risk-grid">
+            {% for student in high_students %}
+            <div class="risk-card high">
+                <h4>High Risk Student</h4>
+                <span class="label">Attendance</span>
+                <p>{{ student.attendance }}%</p>
+                <span class="label">Avg Marks</span>
+                <p>{{ student.avg_marks }}</p>
+                <span class="label">Study Hours</span>
+                <p>{{ student.study_hours }}</p>
+                <span class="label">Backlogs</span>
+                <p>{{ student.backlogs }}</p>
+                <span class="label">Suggestion</span>
+                <p>{{ student.suggestion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">No high risk students available yet.</div>
+        {% endif %}
+    </section>
+
+    <section class="risk-section">
+        <h2 class="risk-title">Medium Risk</h2>
+        {% if medium_students %}
+        <div class="risk-grid">
+            {% for student in medium_students %}
+            <div class="risk-card medium">
+                <h4>Medium Risk Student</h4>
+                <span class="label">Attendance</span>
+                <p>{{ student.attendance }}%</p>
+                <span class="label">Avg Marks</span>
+                <p>{{ student.avg_marks }}</p>
+                <span class="label">Study Hours</span>
+                <p>{{ student.study_hours }}</p>
+                <span class="label">Backlogs</span>
+                <p>{{ student.backlogs }}</p>
+                <span class="label">Suggestion</span>
+                <p>{{ student.suggestion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">No medium risk students available yet.</div>
+        {% endif %}
+    </section>
+
+    <section class="risk-section">
+        <h2 class="risk-title">Low Risk</h2>
+        {% if low_students %}
+        <div class="risk-grid">
+            {% for student in low_students %}
+            <div class="risk-card low">
+                <h4>Low Risk Student</h4>
+                <span class="label">Attendance</span>
+                <p>{{ student.attendance }}%</p>
+                <span class="label">Avg Marks</span>
+                <p>{{ student.avg_marks }}</p>
+                <span class="label">Study Hours</span>
+                <p>{{ student.study_hours }}</p>
+                <span class="label">Backlogs</span>
+                <p>{{ student.backlogs }}</p>
+                <span class="label">Suggestion</span>
+                <p>{{ student.suggestion }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">No low risk students available yet.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
+

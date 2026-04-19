@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Dropout Predictor{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-homepage.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-left">
+        <h1>Transform Student Success with AI 🚀</h1>
+        <p>
+            Our AI-powered dropout prediction system helps identify at-risk students before it's too late.
+            By analyzing attendance, academic performance, and study patterns, we provide early insights
+            and personalized counselling strategies to ensure every student stays on the path to success.
+        </p>
+        <div class="hero-buttons">
+            <a href="/predict" class="btn primary">Try Prediction</a>
+            {% if logged_in and current_user.role == 'admin' %}
+                <a href="/dashboard" class="btn secondary">View Dashboard</a>
+            {% else %}
+                <a href="/predict" class="btn secondary">View Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="hero-right">
+        <img src="{{ url_for('static', filename='images/AI-driven-education-analytics-dashboard.png') }}" height="100px" alt="AI Dashboard">
+    </div>
+</section>
+
+<section class="features">
+    <h2>Why Choose Our AI System?</h2>
+    <div class="feature-container">
+        <div class="feature-card">
+            <h3>📊 Intelligent Dropout Prediction</h3>
+            <p>
+                Our system uses advanced machine learning algorithms to analyze student data such as attendance,
+                marks, and study habits. It accurately predicts the risk level of a student dropping out,
+                helping educators take proactive action before problems escalate.
+            </p>
+        </div>
+        <div class="feature-card">
+            <h3>🧠 Personalized AI Counselling</h3>
+            <p>
+                Based on the predicted risk, the platform provides tailored suggestions and guidance
+                to improve student performance. Whether it's time management, study planning,
+                or mentorship recommendations, every student receives personalized support.
+            </p>
+        </div>
+        <div class="feature-card">
+            <h3>📈 Real-Time Analytics Dashboard</h3>
+            <p>
+                Monitor student progress through interactive dashboards with visual graphs and insights.
+                Track attendance trends, academic performance, and improvement over time to make
+                data-driven decisions efficiently.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="about-system">
+    <h2>About the System</h2>
+    <p>
+        The AI Dropout Prediction and Counselling System is designed to tackle one of the most critical
+        challenges in education - student dropouts. Traditional methods often fail to detect early warning
+        signs, but our intelligent system bridges this gap using data-driven insights.
+    </p>
+    <p>
+        By combining machine learning with an intuitive web interface, this platform empowers institutions,
+        teachers, and students to make informed decisions. It not only predicts risk but also provides
+        actionable solutions to improve outcomes and ensure academic success.
+    </p>
+</section>
+
+<section class="benefits">
+    <h2 class="benefit-heading">Key Benefits</h2>
+    <div class="benefit-container">
+        <div class="benefit-card">
+            <h3>🎯 Early Risk Detection</h3>
+            <p>Identify potential dropouts before it's too late.</p>
+        </div>
+        <div class="benefit-card">
+            <h3>📚 Improved Academic Performance</h3>
+            <p>Help students improve through guided recommendations.</p>
+        </div>
+        <div class="benefit-card">
+            <h3>⚡ Smart Decision Making</h3>
+            <p>Enable educators with real-time insights and analytics.</p>
+        </div>
+        <div class="benefit-card">
+            <h3>🌍 Scalable Solution</h3>
+            <p>Suitable for schools, colleges, and institutions of all sizes.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <h2>Empower Education with AI 🚀</h2>
+    <p>
+        Take a step towards smarter learning and better outcomes.
+        Start predicting, analyzing, and improving student success today.
+    </p>
+    <a href="/signup" class="btn primary">Get Started Now</a>
+</section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-about">
+            <h3>🎓 DropoutAI</h3>
+            <p>
+                AI-powered system to predict student dropout risk and provide
+                intelligent counselling solutions.
+            </p>
+        </div>
+        <div class="footer-links">
+            <h4>Quick Links</h4>
+            <a href="/">Home</a>
+            <a href="/predict">Predict</a>
+            <a href="/analytics">Analytics</a>
+            <a href="/resources">Resources</a>
+            <a href="/about">About</a>
+            
+            {% if logged_in and current_user.role == 'admin' %}
+                <a href="/dashboard">Dashboard</a>
+            {% endif %}
+        </div>
+        <div class="footer-contact">
+            <h4>Contact</h4>
+            <p>Email: support@dropoutai.com</p>
+            <p>Phone: </p>
+        </div>
+    </div>
+    <p class="footer-bottom">
+        © 2026 DropoutAI. All rights reserved.
+    </p>
+</footer>
+{% endblock %}

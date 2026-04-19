@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Predict - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/stype-predict.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero predict-hero">
+    <div class="hero-left">
+        <h1>AI-Powered Student Dropout Prediction System 🎓</h1>
+        <p>
+            Analyze student performance, identify at-risk learners early, and deliver actionable counselling
+            suggestions with a polished AI workflow built for educators and students.
+        </p>
+        <div class="hero-buttons">
+            <a href="#uploadSection" class="btn primary">Upload Dataset</a>
+            <button type="button" class="btn secondary" onclick="showForm()">Manual Entry</button>
+        </div>
+    </div>
+    <div class="hero-right">
+        <div class="hero-card">
+            <h2>Predict with confidence</h2>
+            <p>Use either a CSV dataset or fill in student details manually to get fast dropout risk analysis.</p>
+            <div class="hero-stat">
+                <span>90%+</span>
+                <p>Accurate early risk detection</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section content-card how-it-works">
+    <h2>How the System Works</h2>
+    <ul>
+        <li>📥 Upload student dataset or enter details manually</li>
+        <li>🧠 Machine learning model analyzes performance patterns</li>
+        <li>📊 System predicts dropout risk (Low / Medium / High)</li>
+        <li>💡 Personalized suggestions are generated for improvement</li>
+    </ul>
+</section>
+
+<section class="section content-card method-selection">
+    <h2>Choose Your Analysis Method</h2>
+    <p>
+        Select how you'd like to analyze student data. Upload a dataset for bulk review or use manual entry
+        for one-on-one prediction.
+    </p>
+    <div class="method-buttons">
+        <button onclick="showUpload()" class="btn secondary">📂 Upload Dataset</button>
+        <button onclick="showForm()" class="btn secondary">✍️ Manual Entry</button>
+    </div>
+</section>
+
+<section class="section content-card" id="uploadSection">
+    <h2>Bulk Dataset Analysis</h2>
+    <p>
+        Upload a CSV file containing student records. The system will analyze each entry and classify risk levels
+        to help institutions take proactive action.
+    </p>
+    <p style="color:#94a3b8; font-size: 14px;">Required columns: 
+        <b>attendance, avg_marks, study_hours, backlogs</b>
+    </p>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label class="file-label">Select CSV file</label>
+        <input type="file" name="file" accept=".csv" required>
+        <button type="submit" class="btn primary">Analyze Dataset 🚀</button>
+    </form>
+</section>
+
+<section class="section content-card individual-form">
+    <h2>Individual Student Prediction</h2>
+    <p>
+        Enter a student's attendance, study hours, and backlog details to calculate their risk profile.
+    </p>
+    <div class="field-row">
+        <div>
+            <label>Number of Subjects</label>
+            <input type="number" id="subjectCount" min="1" required>
+        </div>
+        <button type="button" class="btn secondary" onclick="generateInputs()">Generate Subjects</button>
+    </div>
+    <div id="subjectsContainer"></div>
+    <form action="/predict" method="POST" class="prediction-form" onsubmit="return validateForm()">
+        <input type="hidden" name="avg_marks" id="avgMarks">
+        <label>Attendance (%)</label>
+        <input type="number" name="attendance" min="0" max="100" step="0.01" required>
+        <label>Study Hours (per day)</label>
+        <input type="number" name="study_hours" min="0" step="0.01" required>
+        <label>Backlogs (Number of failed subjects)</label>
+        <input type="number" name="backlogs" min="0" required>
+        <button type="submit" class="btn primary" onclick="calculateAverage()">Predict Risk 🚀</button>
+    </form>
+</section>
+
+<section class="section content-card importance">
+    <h2>Why This System Matters</h2>
+    <p>
+        Student dropout is a major challenge in education systems worldwide. Traditional methods often fail
+        to detect early warning signs. This AI-powered solution bridges that gap by providing data-driven
+        insights and proactive recommendations.
+    </p>
+    <p>
+        By combining predictive analytics with counselling strategies, this platform empowers students
+        and educators to make informed decisions and improve academic success rates.
+    </p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function generateInputs() {
+        let count = document.getElementById("subjectCount").value;
+        if (count < 1) {
+            alert("Number of subjects must be at least 1.");
+            return;
+        }
+        let container = document.getElementById("subjectsContainer");
+        container.innerHTML = "";
+        for (let i = 1; i <= count; i++) {
+            container.innerHTML += `
+                <label>Subject ${i} Marks (0-100):</label>
+                <input type="number" class="marks" min="0" max="100" step="0.01" required><br>
+            `;
+        }
+    }
+
+    function calculateAverage() {
+        let marks = document.querySelectorAll(".marks");
+        if (marks.length === 0) {
+            alert("Please generate subjects first.");
+            return;
+        }
+        let total = 0;
+        let valid = true;
+        marks.forEach(input => {
+            let val = parseFloat(input.value);
+            if (isNaN(val) || val < 0 || val > 100) {
+                valid = false;
+            } else {
+                total += val;
+            }
+        });
+        if (!valid) {
+            alert("All marks must be between 0 and 100.");
+            return;
+        }
+        let avg = total / marks.length;
+        document.getElementById("avgMarks").value = avg.toFixed(2);
+    }
+
+    function validateForm() {
+        let attendance = parseFloat(document.querySelector('input[name="attendance"]').value);
+        let studyHours = parseFloat(document.querySelector('input[name="study_hours"]').value);
+        let backlogs = parseInt(document.querySelector('input[name="backlogs"]').value);
+        let avgMarks = parseFloat(document.getElementById("avgMarks").value);
+
+        if (isNaN(attendance) || attendance < 0 || attendance > 100) {
+            alert("Attendance must be between 0 and 100.");
+            return false;
+        }
+        if (isNaN(studyHours) || studyHours < 0) {
+            alert("Study hours must be 0 or more.");
+            return false;
+        }
+        if (isNaN(backlogs) || backlogs < 0) {
+            alert("Backlogs must be 0 or more.");
+            return false;
+        }
+        if (isNaN(avgMarks) || avgMarks < 0 || avgMarks > 100) {
+            alert("Average marks must be calculated and between 0 and 100.");
+            return false;
+        }
+        return true;
+    }
+
+    function showUpload() {
+        document.getElementById("uploadSection").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showForm() {
+        document.querySelector('.individual-form').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+{% endblock %}

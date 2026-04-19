@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Results - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-results.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="result-intro">
+    <h1>Student Risk Analysis</h1>
+    <p>
+        Below is the AI-generated analysis of student performance along with risk levels and counselling
+        suggestions.
+    </p>
+</section>
+
+<section class="result-table">
+    <table>
+        <tr>
+            <th>Attendance</th>
+            <th>Avg Marks</th>
+            <th>Study Hours</th>
+            <th>Backlogs</th>
+            <th>Risk Level</th>
+            <th>Suggestion</th>
+        </tr>
+        {% for row in data %}
+        <tr class="{% if row.risk == 'High' %}high-risk{% elif row.risk == 'Medium' %}medium-risk{% else %}low-risk{% endif %}">
+            <td>{{ row.attendance }}</td>
+            <td>{{ row.avg_marks }}</td>
+            <td>{{ row.study_hours }}</td>
+            <td>{{ row.backlogs }}</td>
+            <td>{{ row.risk }}</td>
+            <td>{{ row.suggestion }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+
+<section class="summary">
+    <h2>Summary</h2>
+    <p>Total Students: {{ total }}</p>
+    <p>High Risk: {{ high }}</p>
+    <p>Medium Risk: {{ medium }}</p>
+    <p>Low Risk: {{ low }}</p>
+</section>
+
+<div class="download-btn">
+    <a href="/download" class="btn primary">Download CSV Report</a>
+</div>
+
+<div class="back-btn">
+    <a href="/predict">⬅ Back to Prediction</a>
+</div>
+{% endblock %}
