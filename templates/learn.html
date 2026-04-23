@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Learn - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-resource.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="resource-page">
+    <section class="resource-hero">
+        <div>
+            <p class="eyebrow">Student Success Hub</p>
+            <h1>Learn Better Habits for Academic Success</h1>
+            <p class="hero-copy">This page gives practical study tips, time management ideas, backlog reduction strategies, and motivation support for students who want to stay on track.</p>
+        </div>
+    </section>
+
+    <section class="resource-cards">
+        <article class="resource-card">
+            <div class="card-icon">📚</div>
+            <h2>Study Tips</h2>
+            <p>Break study sessions into short blocks, review notes every day, and use active recall to remember key ideas more easily.</p>
+        </article>
+
+        <article class="resource-card">
+            <div class="card-icon">⏱️</div>
+            <h2>Time Management</h2>
+            <p>Create a weekly study plan, set clear priorities, and use simple timers to stay focused without feeling overwhelmed.</p>
+        </article>
+
+        <article class="resource-card">
+            <div class="card-icon">🧾</div>
+            <h2>Reducing Backlogs</h2>
+            <p>Tackle one backlog subject at a time, ask for help from teachers, and turn weak areas into short daily goals.</p>
+        </article>
+
+        <article class="resource-card">
+            <div class="card-icon">🔥</div>
+            <h2>Motivation</h2>
+            <p>Set small milestones, celebrate progress, and remind yourself why the goal matters to keep going on difficult days.</p>
+        </article>
+
+        <article class="resource-card">
+            <div class="card-icon">❤️</div>
+            <h2>Mental Health</h2>
+            <p>Academic pressure can be tough. Learn stress management techniques and when to seek professional support.</p>
+        </article>
+
+        <article class="resource-card">
+            <div class="card-icon">👥</div>
+            <h2>Study Groups</h2>
+            <p>Connect with peers, form study groups, and build a support network that keeps you accountable.</p>
+        </article>
+    </section>
+
+    <section class="resource-observations">
+        <h2>How this page adds value</h2>
+        <p>This learning page supports the prediction system by helping students and counselors act on risk results. It turns data-driven insights into practical steps, so students can improve attendance, reduce backlogs, and stay motivated before problems grow larger.</p>
+        
+        <div class="quick-action-guide">
+            <h3>Quick Action Guide</h3>
+            <ul>
+                <li><strong>If you're High Risk:</strong> Focus on attendance (aim for 75%+) and seek immediate counselling</li>
+                <li><strong>If you're Medium Risk:</strong> Create a study schedule and join study groups</li>
+                <li><strong>If you're Low Risk:</strong> Maintain habits and help peers who need support</li>
+                <li><strong>For all students:</strong> Regular exercise, good sleep, and stress management are crucial</li>
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
+

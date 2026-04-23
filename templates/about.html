@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}About DropoutAI{% endblock %}
+
+{% block content %}
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-about.css') }}">
+</head>
+<section class="about-page">
+    <div class="page-header">
+        <h1>About DropoutAI</h1>
+        <p>DropoutAI is an innovative platform that uses artificial intelligence to predict student dropout risk and deliver timely counselling support.</p>
+    </div>
+
+    <div class="content-card about-card">
+        <h2>What we do</h2>
+        <p>DropoutAI analyzes attendance, academic performance, study hours, and backlog data to create proactive, actionable risk insights for students and educators.</p>
+        <p>Our mission is to empower learners and school administrators to prevent dropout events through smarter intervention and better decision-making.</p>
+
+        <h3>Features:</h3>
+        <ul>
+            <li>AI-powered risk prediction</li>
+            <li>Visual dashboards and analytics</li>
+            <li>Personalized counselling recommendations</li>
+            <li>Educational resources and tips</li>
+            <li>Role-based access for admins and normal users</li>
+        </ul>
+
+        <p>Contact us at <a href="mailto:support@dropoutai.com">support@dropoutai.com</a> for more information.</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <header class="analytics-header">
+        <h1>Analytics Dashboard</h1>
+        <p>Explore key insights from student performance data. This page helps identify how attendance, backlogs,
+            and study hours impact dropout risk.</p>
+    </header>
+
+    <!-- Date Range Filter -->
+    <div class="date-filter-card" style="background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(139, 92, 246, 0.1)); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(96, 165, 250, 0.2);">
+        <form method="get" action="{{ url_for('analytics') }}" style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap;">
+            <div style="display: flex; flex-direction: column;">
+                <label for="start_date" style="color: #f8fafc; font-size: 0.9rem; margin-bottom: 6px;">Start Date</label>
+                <input type="date" id="start_date" name="start_date" value="{{ start_date }}" style="padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(15, 23, 42, 0.8); color: #f8fafc;">
+            </div>
+            <div style="display: flex; flex-direction: column;">
+                <label for="end_date" style="color: #f8fafc; font-size: 0.9rem; margin-bottom: 6px;">End Date</label>
+                <input type="date" id="end_date" name="end_date" value="{{ end_date }}" style="padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(15, 23, 42, 0.8); color: #f8fafc;">
+            </div>
+            <button type="submit" style="padding: 8px 20px; border-radius: 6px; background: linear-gradient(45deg, #60a5fa, #3b82f6); color: white; border: none; cursor: pointer; font-weight: 500; transition: all 0.2s;">Apply Filter</button>
+            <a href="{{ url_for('analytics') }}" style="padding: 8px 20px; border-radius: 6px; background: rgba(100, 116, 139, 0.2); color: #cbd5e1; border: none; cursor: pointer; font-weight: 500; text-decoration: none; transition: all 0.2s;">Reset</a>
+        </form>
+    </div>
+
+    <div class="insights-grid">
+        <div class="insight-card">
+            <h3>Attendance vs Risk</h3>
+            <p>Students with lower attendance are more likely to enter the high-risk category. Regular participation
+                is a strong signal of engagement. Target: Maintain 75%+ attendance.</p>
+        </div>
+        <div class="insight-card">
+            <h3>Backlogs vs Risk</h3>
+            <p>Backlogs are closely linked with higher dropout risk. Clearing failed subjects early can reduce the
+                risk profile significantly. Max target: 0-1 backlog.</p>
+        </div>
+        <div class="insight-card">
+            <h3>Study Hours vs Risk</h3>
+            <p>Consistent study hours usually separate low-risk students from medium and high risk. More daily
+                effort typically improves outcomes. Target: 4-6 hours/day.</p>
+        </div>
+        <div class="insight-card">
+            <h3>Grade Performance</h3>
+            <p>Students with average marks below 60% are at higher risk. Consistent performance above 65% indicates
+                strong academic foundation and lower dropout probability.</p>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-card">
+            <h2>Attendance by Risk Level</h2>
+            <canvas id="attendanceChart" class="chart-canvas"></canvas>
+        </div>
+        <div class="chart-card">
+            <h2>Backlogs by Risk Level</h2>
+            <canvas id="backlogsChart" class="chart-canvas"></canvas>
+        </div>
+        <div class="chart-card">
+            <h2>Study Hours by Risk Level</h2>
+            <canvas id="studyChart" class="chart-canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="observations">
+        <h2>Key Observations</h2>
+        <ul>
+            <li><strong>High risk</strong> students tend to have low attendance and more backlogs than the average
+                student.</li>
+            <li><strong>Medium risk</strong> students often show inconsistent study hours and may need support to
+                stay on track.</li>
+            <li><strong>Low risk</strong> students usually maintain good attendance and steady study habits.</li>
+            <li>Tracking these patterns regularly helps prioritize counselling for students who need it most.</li>
+            <li><strong>Early intervention</strong> can prevent students from moving to higher risk categories.</li>
+            <li><strong>Attendance improvement</strong> of just 10-15% can significantly reduce dropout risk.</li>
+        </ul>
+        
+        <h3>Actionable Recommendations</h3>
+        <div class="recommendations-grid">
+            <div class="recommendation-card high-risk">
+                <strong>For High-Risk Students:</strong> Immediate counselling, daily attendance monitoring, and academic mentoring required.
+            </div>
+            <div class="recommendation-card medium-risk">
+                <strong>For Medium-Risk Students:</strong> Bi-weekly check-ins, study schedule creation, and peer group support.
+            </div>
+            <div class="recommendation-card low-risk">
+                <strong>For Low-Risk Students:</strong> Maintain current habits and consider becoming peer mentors.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.analyticsData = {
+        attendance_high: {{ attendance_high | default(40, true) | tojson }},
+        attendance_medium: {{ attendance_medium | default(65, true) | tojson }},
+        attendance_low: {{ attendance_low | default(88, true) | tojson }},
+        backlogs_high: {{ backlogs_high | default(3.2, true) | tojson }},
+        backlogs_medium: {{ backlogs_medium | default(1.3, true) | tojson }},
+        backlogs_low: {{ backlogs_low | default(0.4, true) | tojson }},
+        study_high: {{ study_high | default(2.4, true) | tojson }},
+        study_medium: {{ study_medium | default(4.6, true) | tojson }},
+        study_low: {{ study_low | default(6.8, true) | tojson }}
+    };
+</script>
+<script src="{{ url_for('static', filename='js/analytics-charts.js') }}"></script>
+{% endblock %}

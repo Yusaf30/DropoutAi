@@ -1,0 +1,292 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* BODY */
+body {
+    background: linear-gradient(135deg, #0f172a, #1e293b, #020617);
+    color: white;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 110px;
+    padding: 10px 5%;
+
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 130px;  /* FIXED */
+    width: auto;
+}
+
+/* NAV LINKS */
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-links a:hover {
+    color: #38bdf8;
+}
+
+/* underline effect */
+.nav-links a::after {
+    content: "";
+    width: 0%;
+    height: 2px;
+    background: #ff7b00;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* RIGHT SIDE */
+.auth-buttons,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+/* LOGIN */
+.login {
+    border: 1px solid white;
+    color: white;
+}
+
+/* SIGNUP */
+.signup {
+    background: linear-gradient(45deg, #ff7b00, #ff3c00);
+    color: white;
+}
+
+/* LOGOUT */
+.logout-btn {
+    border: 1px solid white;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+/* 🔥 DASHBOARD PAGE */
+.dashboard-page {
+    width: 100%;
+    padding: 30px 5%;
+}
+
+/* 🔥 MAIN BOX */
+.dashboard-box {
+    width: 100%;
+    padding: 40px;
+    border-radius: 24px;
+
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(14px);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* 🔥 SUMMARY SECTION */
+.dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* 🔥 SUMMARY CARDS */
+.summary-card {
+    padding: 24px;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    text-align: center;
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+
+    transition: all 0.25s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+}
+
+.summary-card h3 {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.summary-card p {
+    font-size: 2.2rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* 🔥 BUTTON ROW (CENTER FIX) */
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* 🔥 REFRESH BUTTON */
+.refresh-button {
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: none;
+
+    background: linear-gradient(45deg, #38bdf8, #6366f1);
+    color: white;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.refresh-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+}
+
+/* 🔥 CHART GRID */
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* 🔥 CHART CARDS */
+.chart-card {
+    width: 100%;
+    padding: 24px;
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+
+    transition: all 0.25s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+}
+
+.chart-card h3 {
+    margin-bottom: 15px;
+}
+
+/* 🔥 ACTION BUTTONS */
+.dashboard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+.dashboard-actions .btn {
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: none;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* PRIMARY */
+.dashboard-actions .btn.primary {
+    background: linear-gradient(45deg, #38bdf8, #1e40af);
+    color: white;
+}
+
+/* SECONDARY */
+.dashboard-actions .btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
+.dashboard-actions .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+}
+
+/* 🔥 CHART SIZE FIX */
+canvas {
+    max-height: 260px;
+}
+
+/* 🔥 RESPONSIVE */
+@media (max-width: 900px) {
+    .dashboard-summary,
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-box {
+        padding: 20px;
+    }
+}

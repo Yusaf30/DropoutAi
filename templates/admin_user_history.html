@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.name }}'s History - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.history-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.history-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.history-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #f97316);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.history-header p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+.user-info-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 30px;
+    backdrop-filter: blur(16px);
+}
+
+.user-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.user-info-item {
+    text-align: center;
+}
+
+.user-info-label {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.user-info-value {
+    color: #f8fafc;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.history-table {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+}
+
+.history-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.history-table th {
+    background: rgba(56, 189, 248, 0.1);
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.history-table td {
+    color: #d1d5db;
+}
+
+.history-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.risk-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.risk-badge.low {
+    background: rgba(40, 167, 69, 0.2);
+    color: #6bcf7f;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.risk-badge.medium {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffd93d;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.risk-badge.high {
+    background: rgba(220, 53, 69, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.no-history {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+.no-history h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #f8fafc;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    text-decoration: none;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #f8fafc;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .history-container {
+        padding: 15px;
+    }
+
+    .history-table {
+        overflow-x: auto;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
+
+    .user-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-left">
+        <h1>📊 {{ user.name }}'s Prediction History</h1>
+        <p>View detailed prediction history for {{ user.name }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="history-container">
+        <a href="{{ url_for('admin_users') }}" class="btn-back">← Back to User Management</a>
+
+        <div class="user-info-card">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #f8fafc;">User Information</h2>
+            <div class="user-info-grid">
+                <div class="user-info-item">
+                    <div class="user-info-label">Name</div>
+                    <div class="user-info-value">{{ user.name }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label">Email</div>
+                    <div class="user-info-value">{{ user.email }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label">Role</div>
+                    <div class="user-info-value">{{ user.role.title() }}</div>
+                </div>
+                <div class="user-info-item">
+                    <div class="user-info-label">Total Predictions</div>
+                    <div class="user-info-value">{{ predictions|length }}</div>
+                </div>
+            </div>
+        </div>
+
+        {% if predictions %}
+        <div class="history-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Attendance (%)</th>
+                        <th>Average Marks</th>
+                        <th>Study Hours</th>
+                        <th>Backlogs</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prediction in predictions %}
+                    <tr>
+                        <td>{{ prediction.prediction_date.split('.')[0] if '.' in prediction.prediction_date else prediction.prediction_date }}</td>
+                        <td>{{ prediction.attendance }}%</td>
+                        <td>{{ prediction.avg_marks }}</td>
+                        <td>{{ prediction.study_hours }}</td>
+                        <td>{{ prediction.backlogs }}</td>
+                        <td>
+                            <span class="risk-badge {{ prediction.risk_level.lower() }}">
+                                {{ prediction.risk_level }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="no-history">
+            <h3>No Predictions Yet</h3>
+            <p>{{ user.name }} hasn't made any predictions yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

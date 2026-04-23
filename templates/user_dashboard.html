@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}User Dashboard - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="page-header">
+        <h1>User Dashboard</h1>
+        <p>Welcome back, {{ current_user.name }}. Here are your latest prediction results.</p>
+    </div>
+
+    <div class="dashboard-box">
+        <div class="dashboard-summary">
+            <div class="summary-card total-card">
+                <h3>Total Students</h3>
+                <p>{{ total | default(0) }}</p>
+            </div>
+            <div class="summary-card high-card">
+                <h3>High Risk</h3>
+                <p>{{ high | default(0) }}</p>
+            </div>
+            <div class="summary-card medium-card">
+                <h3>Medium Risk</h3>
+                <p>{{ medium | default(0) }}</p>
+            </div>
+            <div class="summary-card low-card">
+                <h3>Low Risk</h3>
+                <p>{{ low | default(0) }}</p>
+            </div>
+        </div>
+
+        <div class="dashboard-actions">
+            <button onclick="location.reload()" class="btn primary refresh-button">Refresh Dashboard</button>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>Risk Distribution</h3>
+                <canvas id="riskChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Performance Overview</h3>
+                <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Student Profile Radar</h3>
+                <canvas id="radarChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Risk Trends</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const riskCtx = document.getElementById('riskChart').getContext('2d');
+    new Chart(riskCtx, {
+        type: 'pie',
+        data: {
+            labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+            datasets: [{
+                data: [{{ high | default(0) }}, {{ medium | default(0) }}, {{ low | default(0) }}],
+                backgroundColor: ['#ff6b6b', '#ffd93d', '#6bcf7f']
+            }]
+        }
+    });
+
+    const perfCtx = document.getElementById('performanceChart').getContext('2d');
+    new Chart(perfCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Attendance', 'Marks', 'Study Hours'],
+            datasets: [{
+                label: 'Average',
+                data: [{{ attendance_avg }}, {{ marks_avg }}, {{ study_hours_avg }}],
+                backgroundColor: '#38bdf8'
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    const radarCtx = document.getElementById('radarChart').getContext('2d');
+    new Chart(radarCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Attendance', 'Marks', 'Study Hours', 'Low Backlogs'],
+            datasets: [{
+                label: 'Your Profile',
+                data: [
+                    {{ attendance_avg }},
+                    {{ marks_avg }},
+                    {{ study_hours_avg }},
+                    {{ 10 - backlogs_avg }}
+                ],
+                backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                borderColor: '#38bdf8',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                r: { beginAtZero: true, max: 100 }
+            }
+        }
+    });
+
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: ['Current'],
+            datasets: [
+                {
+                    label: 'High Risk',
+                    data: [{{ high }}],
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: 'Medium Risk',
+                    data: [{{ medium }}],
+                    borderColor: '#ffd93d',
+                    backgroundColor: 'rgba(255, 217, 61, 0.1)',
+                    tension: 0.4
+                },
+                {
+                    label: 'Low Risk',
+                    data: [{{ low }}],
+                    borderColor: '#6bcf7f',
+                    backgroundColor: 'rgba(107, 207, 127, 0.1)',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+{% endblock %}

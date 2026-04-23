@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+
+{% block title %}Bulk Email Notifications - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
+.email-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.email-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.email-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #f97316);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.email-header p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+.email-form-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 30px;
+    backdrop-filter: blur(16px);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    color: #f8fafc;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(15, 23, 42, 0.8);
+    color: #f8fafc;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(96, 165, 250, 0.5);
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.recipient-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.recipient-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.recipient-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+.recipient-option input[type="radio"] {
+    margin-right: 12px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.recipient-option label {
+    margin: 0;
+    cursor: pointer;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.recipient-label {
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.recipient-count {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.btn-send {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #f97316, #ea580c);
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-send:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(249, 115, 22, 0.3);
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.info-box {
+    background: rgba(56, 189, 248, 0.1);
+    border-left: 4px solid rgba(56, 189, 248, 0.5);
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 24px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.info-box strong {
+    color: #38bdf8;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+    .email-container {
+        padding: 15px;
+    }
+
+    .email-form-card {
+        padding: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="email-container">
+    <header class="email-header">
+        <h1>📧 Bulk Email Notifications</h1>
+        <p>Send notifications to students based on their risk level or send to all.</p>
+    </header>
+
+    <div class="email-form-card">
+        <form method="POST" action="{{ url_for('bulk_email') }}">
+            <!-- Statistics -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <span class="stat-number">{{ total_users }}</span>
+                    <span class="stat-label">Total Users</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">{{ high_risk_count }}</span>
+                    <span class="stat-label">High Risk</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">{{ medium_risk_count }}</span>
+                    <span class="stat-label">Medium Risk</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">{{ low_risk_count }}</span>
+                    <span class="stat-label">Low Risk</span>
+                </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="form-group">
+                <label for="subject">Email Subject</label>
+                <input type="text" id="subject" name="subject" placeholder="e.g., Important Update - Dropout Prevention Program" required>
+            </div>
+
+            <!-- Message -->
+            <div class="form-group">
+                <label for="message">Email Message</label>
+                <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+            </div>
+
+            <!-- Recipient Selection -->
+            <div class="form-group">
+                <label>Send to:</label>
+                <div class="recipient-options">
+                    <div class="recipient-option">
+                        <input type="radio" id="all" name="recipient_type" value="all" checked required>
+                        <label for="all">
+                            <div style="flex: 1;">
+                                <div class="recipient-label">All Users</div>
+                                <div class="recipient-count">{{ total_users }} recipients</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="recipient-option">
+                        <input type="radio" id="high_risk" name="recipient_type" value="high_risk" required>
+                        <label for="high_risk">
+                            <div style="flex: 1;">
+                                <div class="recipient-label">High Risk Only</div>
+                                <div class="recipient-count">{{ high_risk_count }} recipients</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="recipient-option">
+                        <input type="radio" id="medium_risk" name="recipient_type" value="medium_risk" required>
+                        <label for="medium_risk">
+                            <div style="flex: 1;">
+                                <div class="recipient-label">Medium Risk Only</div>
+                                <div class="recipient-count">{{ medium_risk_count }} recipients</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="recipient-option">
+                        <input type="radio" id="low_risk" name="recipient_type" value="low_risk" required>
+                        <label for="low_risk">
+                            <div style="flex: 1;">
+                                <div class="recipient-label">Low Risk Only</div>
+                                <div class="recipient-count">{{ low_risk_count }} recipients</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <strong>ℹ️ Note:</strong> Emails will be sent to selected recipients. This is currently a notification system and messages are logged in the application.
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="submit" class="btn-send">📤 Send Notifications</button>
+                <a href="{{ url_for('admin_users') }}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
