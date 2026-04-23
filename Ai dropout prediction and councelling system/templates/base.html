@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DropoutAI{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="google-site-verification" content="google9646e0a9b286bef7.html" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    {% block styles %}{% endblock %}
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-inner">
+            <div class="logo">
+                <a href="/"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="DropoutAi"></a>
+            </div>
+
+            <nav class="nav-links">
+                <a href="/">Home</a>
+                {% if logged_in %}
+                    {% if current_user.role == 'admin' %}
+                        <a href="/dashboard">Dashboard</a>
+                        <a href="/counselling">Counselling</a>
+                        <a href="/analytics">Analytics</a>
+                    {% else %}
+                        <a href="/predict">Predict</a>
+                        <a href="/user_dashboard">Dashboard</a>
+                        <a href="/user_counselling">Counselling</a>
+                        <a href="/analytics">Analytics</a>
+                    {% endif %}
+                {% endif %}
+                <a href="/resources">Resources</a>
+                <a href="/about">About</a>
+            </nav>
+
+            <div class="nav-right">
+                {% if logged_in %}
+                    <span class="user-welcome">Hi, {{ current_user.name }}</span>
+                    <a href="/logout" class="btn secondary">Logout</a>
+                {% else %}
+                    <a href="/login" class="btn login">Login</a>
+                    <a href="/signup" class="btn signup">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-grid" aria-live="polite" aria-atomic="true">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.flash').forEach(function (toast, index) {
+                setTimeout(function () {
+                    toast.classList.add('flash-hide');
+                }, 10000 + index * 250);
+                toast.addEventListener('animationend', function (event) {
+                    if (event.animationName === 'slideOut') {
+                        toast.remove();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

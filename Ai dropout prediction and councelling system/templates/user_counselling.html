@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Personalized Counselling - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-counselling.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="page-header">
+        <h1>Personalized Counselling</h1>
+        <p>Based on your predictions, here are tailored recommendations to help you succeed. Focus on the areas that match your risk level.</p>
+    </div>
+
+    {% if high_students %}
+    <div class="risk-section">
+        <h2 class="risk-title">High Risk Students</h2>
+        <div class="risk-grid">
+            {% for student in high_students %}
+            <div class="risk-card high">
+                <h4>Student Profile</h4>
+                <p><strong>Attendance:</strong> {{ student.attendance }}%</p>
+                <p><strong>Average Marks:</strong> {{ student.avg_marks }}</p>
+                <p><strong>Study Hours:</strong> {{ student.study_hours }}</p>
+                <p><strong>Backlogs:</strong> {{ student.backlogs }}</p>
+                <p><strong>Risk:</strong> {{ student.risk }}</p>
+                <p><strong>Suggestion:</strong> {{ student.suggestion }}</p>
+                <h4>Action Plan:</h4>
+                <ul>
+                    <li>Schedule daily study sessions and track attendance.</li>
+                    <li>Seek help for backlogs immediately.</li>
+                    <li>Contact counselors for personalized support.</li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if medium_students %}
+    <div class="risk-section">
+        <h2 class="risk-title">Medium Risk Students</h2>
+        <div class="risk-grid">
+            {% for student in medium_students %}
+            <div class="risk-card medium">
+                <h4>Student Profile</h4>
+                <p><strong>Attendance:</strong> {{ student.attendance }}%</p>
+                <p><strong>Average Marks:</strong> {{ student.avg_marks }}</p>
+                <p><strong>Study Hours:</strong> {{ student.study_hours }}</p>
+                <p><strong>Backlogs:</strong> {{ student.backlogs }}</p>
+                <p><strong>Risk:</strong> {{ student.risk }}</p>
+                <p><strong>Suggestion:</strong> {{ student.suggestion }}</p>
+                <h4>Action Plan:</h4>
+                <ul>
+                    <li>Increase study hours gradually.</li>
+                    <li>Improve attendance consistency.</li>
+                    <li>Focus on weak subjects.</li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if low_students %}
+    <div class="risk-section">
+        <h2 class="risk-title">Low Risk Students</h2>
+        <div class="risk-grid">
+            {% for student in low_students %}
+            <div class="risk-card low">
+                <h4>Student Profile</h4>
+                <p><strong>Attendance:</strong> {{ student.attendance }}%</p>
+                <p><strong>Average Marks:</strong> {{ student.avg_marks }}</p>
+                <p><strong>Study Hours:</strong> {{ student.study_hours }}</p>
+                <p><strong>Backlogs:</strong> {{ student.backlogs }}</p>
+                <p><strong>Risk:</strong> {{ student.risk }}</p>
+                <p><strong>Suggestion:</strong> {{ student.suggestion }}</p>
+                <h4>Action Plan:</h4>
+                <ul>
+                    <li>Maintain current good habits.</li>
+                    <li>Help peers if possible.</li>
+                    <li>Explore advanced topics.</li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

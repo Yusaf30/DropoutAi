@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-analytics.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <header class="analytics-header">
+        <h1>Analytics Dashboard</h1>
+        <p>Explore key insights from student performance data. This page helps identify how attendance, backlogs,
+            and study hours impact dropout risk.</p>
+    </header>
+
+    <div class="insights-grid">
+        <div class="insight-card">
+            <h3>Attendance vs Risk</h3>
+            <p>Students with lower attendance are more likely to enter the high-risk category. Regular participation
+                is a strong signal of engagement.</p>
+        </div>
+        <div class="insight-card">
+            <h3>Backlogs vs Risk</h3>
+            <p>Backlogs are closely linked with higher dropout risk. Clearing failed subjects early can reduce the
+                risk profile significantly.</p>
+        </div>
+        <div class="insight-card">
+            <h3>Study Hours vs Risk</h3>
+            <p>Consistent study hours usually separate low-risk students from medium and high risk. More daily
+                effort typically improves outcomes.</p>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <div class="chart-card">
+            <h2>Attendance by Risk Level</h2>
+            <canvas id="attendanceChart" class="chart-canvas"></canvas>
+        </div>
+        <div class="chart-card">
+            <h2>Backlogs by Risk Level</h2>
+            <canvas id="backlogsChart" class="chart-canvas"></canvas>
+        </div>
+        <div class="chart-card">
+            <h2>Study Hours by Risk Level</h2>
+            <canvas id="studyChart" class="chart-canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="observations">
+        <h2>Key Observations</h2>
+        <ul>
+            <li><strong>High risk</strong> students tend to have low attendance and more backlogs than the average
+                student.</li>
+            <li><strong>Medium risk</strong> students often show inconsistent study hours and may need support to
+                stay on track.</li>
+            <li><strong>Low risk</strong> students usually maintain good attendance and steady study habits.</li>
+            <li>Tracking these patterns regularly helps prioritize counselling for students who need it most.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.analyticsData = {
+        attendance_high: {{ attendance_high | default(40, true) | tojson }},
+        attendance_medium: {{ attendance_medium | default(65, true) | tojson }},
+        attendance_low: {{ attendance_low | default(88, true) | tojson }},
+        backlogs_high: {{ backlogs_high | default(3.2, true) | tojson }},
+        backlogs_medium: {{ backlogs_medium | default(1.3, true) | tojson }},
+        backlogs_low: {{ backlogs_low | default(0.4, true) | tojson }},
+        study_high: {{ study_high | default(2.4, true) | tojson }},
+        study_medium: {{ study_medium | default(4.6, true) | tojson }},
+        study_low: {{ study_low | default(6.8, true) | tojson }}
+    };
+</script>
+<script src="{{ url_for('static', filename='js/analytics-charts.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - DropoutAI{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style-dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-page">
+    <div class="page-header">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome back, {{ user.name }}. Here are the latest prediction totals from your uploaded dataset.</p>
+    </div>
+
+    <div class="dashboard-box">
+        <div class="dashboard-summary">
+            <div class="summary-card total-card">
+                <h3>Total Students</h3>
+                <p>{{ total | default(0) }}</p>
+            </div>
+            <div class="summary-card high-card">
+                <h3>High Risk</h3>
+                <p>{{ high | default(0) }}</p>
+            </div>
+            <div class="summary-card medium-card">
+                <h3>Medium Risk</h3>
+                <p>{{ medium | default(0) }}</p>
+            </div>
+            <div class="summary-card low-card">
+                <h3>Low Risk</h3>
+                <p>{{ low | default(0) }}</p>
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-card">
+                <h3>Risk Distribution</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Prediction Summary</h3>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+
+        <div class="dashboard-actions">
+            <a href="/predict" class="btn primary">Go to Predict</a>
+            <a href="/counselling" class="btn secondary">Counselling</a>
+            <a href="/logout" class="btn secondary">Logout</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.dashboardData = {
+        total: {{ total | default(0, true) | tojson }},
+        high: {{ high | default(0, true) | tojson }},
+        medium: {{ medium | default(0, true) | tojson }},
+        low: {{ low | default(0, true) | tojson }}
+    };
+</script>
+<script src="{{ url_for('static', filename='js/dashboard-charts.js') }}"></script>
+{% endblock %}
+
